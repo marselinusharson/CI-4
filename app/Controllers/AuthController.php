@@ -23,7 +23,7 @@ class AuthController extends BaseController
         //1. Mengambil data dari input form
         $data = [
             'nama' => $this->request->getPost('nama'),
-            'emali' => $this->request->getPost('email'),
+            'email' => $this->request->getPost('email'),
             'password' => $this->request->getPost('password'),
             'konfirmasi_password' => $this->request->getPost('konfirmasi_password')
         ];
@@ -45,7 +45,7 @@ class AuthController extends BaseController
                 'password' => password_hash($data['password'], PASSWORD_BCRYPT),
                 'role' => 'siswa'
             ]);
-            return redirect()->to(base_url('/registrasi/simpan'))->with('sukses', 'Registrasi berhasil!');
+            return redirect()->to(base_url('registrasi'))->with('sukses', 'Registrasi berhasil!');
         } else {
             //jika gagal, beri pesan gagal
             $errorMessages = $validation->getErrors();
