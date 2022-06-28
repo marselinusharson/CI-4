@@ -60,4 +60,41 @@ class AuthController extends BaseController
         ];
         return view('login', $data);
     }
+
+    public function prosesLogin()
+    {
+        //1. Ambil data dari form login
+        $data = [
+            'email' => $this->request->getPost('email'),
+            'password' => $this->request->getPost('password'),
+        ];
+        //2. Validasi input
+        $validation = \Config\Services::validation();
+
+        $validation->setRules([
+            'email' => 'required|valid_email',
+            'password' => 'required|min_length[8]',
+        ]);
+        if ($validation->run($data)) {
+            //a. Jika berhasil, cek di database apakah ada user dengan email sesuai
+            $user = $this->model->where('email', $data['email'])->first();
+            if ($user) {
+                //jika ada, verifikasi password
+                $verifikasiPassword =  password_verify($data['password'], $user['password']);
+                if ($verifikasiPassword) {
+                    //jika berhasil, buat session dan arahkan ke halaman data siswa
+                    $sessionData = [
+                        'name' => $user['name'],
+                        'role' => $user['role'],
+                        'logged-in' => TRUE
+                    ];
+                    session()->set($sessionData);
+                    return redirect()->to(base_url('data-siswa'));
+                }
+            }
+        } else {
+            //b. Jika validasi input/verifikasi password gagal, beri pesan email/password salah
+            return redirect()->to(base_url('login'))->with('gagal', 'Email/password tidak valid');
+        }
+    }
 }

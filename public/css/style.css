@@ -1,0 +1,8 @@
+.nav-item .nav-link:visited {
+  color: black;
+  background-color: red;
+}
+
+body a {
+  color: red;
+}

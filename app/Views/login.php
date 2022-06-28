@@ -11,6 +11,15 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
+                        <div class="col">
+                            <?php if (session()->getFlashdata('gagal')) : ?>
+                                <div class="alert alert-danger" role="alert">
+                                    <?= session()->getFlashdata('gagal'); ?>
+                                </div>
+                            <?php endif ?>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-mx-auto">
                             <form action="<?= base_url('login/proses'); ?>" method="POST">
                                 <?= csrf_field(); ?>
